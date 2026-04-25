@@ -1,0 +1,33 @@
+.HeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+
+    h2 {
+        color: #00008b;
+    }
+
+    &__title {
+        font-size: 15px;
+    }
+
+    &__user-sec {
+        display: flex;
+        gap: 12px;
+    }
+
+    &__logout {
+        border: none;
+        background: transparent;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        color: #00008b;
+
+        &:hover {
+            color: #1d1f18;
+        }
+    }
+}

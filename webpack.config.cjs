@@ -1,0 +1,60 @@
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const { ModuleFederationPlugin } = require("webpack").container
+const path = require("path")
+require("dotenv").config()
+
+module.exports = {
+    mode: "development",
+    entry: "./src/main.tsx",
+    devServer: {
+        port: 3000,
+        historyApiFallback: true,
+        static: {
+            directory: path.join(__dirname, "public")
+        },
+        hot: true,
+        liveReload: true
+    },
+    output: {
+        publicPath: "/",
+    },
+    resolve: {
+        extensions: [".tsx", ".ts", ".js"],
+    },
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader",
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.(css|scss)$/,
+                use: ["style-loader", "css-loader", "sass-loader"]
+            }
+        ],
+    },
+    plugins: [
+        new ModuleFederationPlugin({
+            name: "shell",
+            filename: "remoteEntry.js",
+            remotes: {
+                playground: `playground@${process.env.PLAYGROUND_REMOTE}`,
+                templates: `templates@${process.env.TEMPLATES_REMOTE}`,
+                evaluation: `evaluation@${process.env.EVALUATION_REMOTE}`
+            },
+            exposes: {
+                "./authStore": "./src/store/auth.store.ts",
+                "./savedPromptsStore": "./src/store/savedPrompts.store.ts"
+            },
+            shared: {
+                react: { singleton: true, requiredVersion: false },
+                "react-dom": { singleton: true, requiredVersion: false },
+                zustand: { singleton: true, requiredVersion: false }
+            },
+        }),
+        new HtmlWebpackPlugin({
+            template: "./public/index.html",
+        }),
+    ],
+}
