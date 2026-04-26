@@ -6,6 +6,9 @@ require("dotenv").config()
 module.exports = {
     mode: "development",
     entry: "./src/main.tsx",
+    cache: {
+        type: "filesystem",
+    },
     devServer: {
         port: 3000,
         historyApiFallback: true,

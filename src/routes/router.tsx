@@ -6,17 +6,19 @@ import Login from "../components/login/Login"
 import ProtectedRoute from "./ProtectedRoute"
 import PublicRoute from "./PublicRoute"
 import Unauthorized from "../modules/Unauthorized"
+import { SafeRemote } from "../components/SafeRemote"
+import { retryImport } from "../utils/retryImport"
 
 import Settings from "../modules/settings/Settings"
 
 import { useAuth } from "../store/auth.store"
 
 //MFE's
-const Playground = lazy(() => import("playground/Playground"))
-const SavedPromptDetail = lazy(() => import("playground/SavedPromptDetail"))
+const Playground = lazy(() => retryImport(() => import("playground/Playground")))
+const SavedPromptDetail = lazy(() => retryImport(() => import("playground/SavedPromptDetail")))
 
-const Templates = lazy(() => import("templates/Templates"))
-const Evaluation = lazy(() => import("evaluation/Evaluation"))
+const Templates = lazy(() => retryImport(() => import("templates/Templates")))
+const Evaluation = lazy(() => retryImport(() => import("evaluation/Evaluation")))
 
 //Local Navigation
 import { useParams } from "react-router-dom"
@@ -56,9 +58,9 @@ export const router = createHashRouter([
                 path: "playground",
                 element: (
                     <ProtectedRoute allowedRoles={["admin", "developer", "user"]}>
-                        <Suspense fallback={<div>Loading...</div>}>
+                        <SafeRemote fallback={<div>Failed to load Playground</div>}>
                             <Playground />
-                        </Suspense>
+                        </SafeRemote>
                     </ProtectedRoute>
                 ),
                 handle: { title: "Prompt Playground" },
@@ -68,7 +70,9 @@ export const router = createHashRouter([
                 path: "templates",
                 element: (
                     <ProtectedRoute allowedRoles={["admin", "developer", "user"]}>
-                        <Templates />
+                        <SafeRemote fallback={<div>Failed to load Templates</div>}>
+                            <Templates />
+                        </SafeRemote>
                     </ProtectedRoute>
                 ),
                 handle: { title: "Template Library" }
@@ -77,7 +81,9 @@ export const router = createHashRouter([
                 path: "evaluation",
                 element: (
                     <ProtectedRoute allowedRoles={["admin", "developer"]}>
-                        <Evaluation />
+                        <SafeRemote fallback={<div>Failed to load Evaluation</div>}>
+                            <Evaluation />
+                        </SafeRemote>
                     </ProtectedRoute>
                 ),
                 handle: { title: "Evaluation Reports" }
@@ -95,9 +101,9 @@ export const router = createHashRouter([
                 path: "/saved-prompts/:id",
                 element: (
                     <ProtectedRoute allowedRoles={["admin", "developer", "user"]}>
-                        <Suspense fallback={<div>Loading...</div>}>
+                        <SafeRemote fallback={<div>Failed to load Saved Prompt</div>}>
                             <SavedPromptWrapper />
-                        </Suspense>
+                        </SafeRemote>
                     </ProtectedRoute>
                 ),
                 handle: { title: "Saved Prompt" }
