@@ -16,7 +16,7 @@ module.exports = {
         liveReload: true
     },
     output: {
-        publicPath: "/",
+        publicPath: "auto",
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
