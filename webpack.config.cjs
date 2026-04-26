@@ -1,7 +1,8 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { ModuleFederationPlugin } = require("webpack").container
 const path = require("path")
-require("dotenv").config()
+const envFile = process.env.NODE_ENV === "production" ? ".env.prod" : ".env.dev"
+require("dotenv").config({ path: envFile })
 
 module.exports = {
     mode: "development",
