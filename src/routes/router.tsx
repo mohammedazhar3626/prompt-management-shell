@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react"
-import { createBrowserRouter, Navigate } from "react-router-dom"
+import { createHashRouter, Navigate } from "react-router-dom"
 
 import Layout from "../app/layout"
 import Login from "../components/login/Login"
@@ -35,7 +35,7 @@ const RootRedirect = () => {
         : <Navigate to="/login" replace />
 }
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
     {
         path: "/login",
         element: (
