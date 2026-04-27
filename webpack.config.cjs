@@ -16,7 +16,7 @@ module.exports = {
         static: {
             directory: path.join(__dirname, "public")
         },
-        hot: true,
+        hot: false,
         liveReload: true
     },
     output: {

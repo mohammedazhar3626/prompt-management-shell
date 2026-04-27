@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
 type User = {
     id: number
@@ -24,11 +24,15 @@ export const useAuth = create<AuthState>()(
                 const { password, ...safeUser } = user as any
                 set({ user: safeUser })
             },
-            logout: () => set({ user: null }),
+            logout: () => {
+                sessionStorage.removeItem("auth-storage")
+                set({ user: null })
+            },
             setHasHydrated: (state) => set({ hasHydrated: state })
         }),
         {
             name: "auth-storage",
+            storage: createJSONStorage(() => sessionStorage),
             onRehydrateStorage: () => (state) => {
                 state?.setHasHydrated(true)
             }
